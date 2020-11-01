@@ -1,0 +1,105 @@
+:root {
+	--primary-color: #81B03F;
+	--text-color: #333333;
+}
+
+body {
+	font-family: 'Lato', sans-serif;
+	color: var(--text-color);
+	overflow: hidden
+}
+
+.landing {
+	background-color: rgba(0, 0, 0, 0);
+	background-repeat: no-repeat;
+	background-image: url(../images/bg-landing.jpg);
+	background-size: cover;
+	background-position: center center;
+	width: 100%;
+	min-height: 100vh;
+	max-height: 100vh;
+	opacity: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.landing .content {
+	flex-direction: column;
+	height: 100%;
+	padding-bottom: 10em;
+}
+
+.landing .content h1 {
+	font-weight: bolder;
+	font-size: 3em;
+	color: #000000;
+}
+
+.landing .content .btn {
+	background-color: var(--primary-color);
+	border-radius: 50px;
+	color: #fff;
+}
+
+.landing .content .btn:hover {
+	background-color: #597b29;
+}
+
+.sideline {
+	background-color: var(--primary-color);
+}
+
+.logoPrimary {
+	display: none;
+}
+
+.logoSecondary {
+	display: block;
+}
+
+.navbar-text {
+	padding: 0 !important
+}
+
+
+
+@media (max-width: 575.98px) {
+	.landing .content {
+		text-align: center;
+	}
+
+	.landing .content p {
+		margin: 25px 0
+	}
+}
+
+@media (min-width: 767.98px) {}
+
+@media (min-width: 991.98px) {
+	.logoPrimary {
+		display: block;
+	}
+
+	.logoSecondary {
+		display: none;
+	}
+
+	.landing {
+		padding-left: 5em;
+		padding-right: 5em;
+	}
+
+	.landing .content h1 {
+		font-size: 5em;
+	}
+
+	.landing .content p {
+		font-size: 1.2em;
+	}
+
+
+}
+
+
+
+@media (min-width: 1199.98px) {}
