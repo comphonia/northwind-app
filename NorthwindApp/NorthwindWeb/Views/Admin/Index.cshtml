@@ -2,6 +2,14 @@
     ViewData["Title"] = "Admin";
 }
 
+@section HeadContent{
+    <link rel="stylesheet" href="~/lib/kendoui/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="~/lib/kendoui/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="~/lib/kendoui/styles/kendo.default.mobile.min.css" />
+
+
+}
+
 <div class="titleBar">
     <div class="shade"></div>
     <div class="row ">
@@ -10,3 +18,76 @@
         </div>
     </div>
 </div>
+
+<div class="container my-5">
+    <div id="grid"></div>
+</div>
+
+
+@section Scripts{
+    <script src="~/lib/kendoui/js/kendo.all.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var crudServiceBaseUrl = window.location.origin,
+                dataSource = new kendo.data.DataSource({
+                    transport: {
+                        read: {
+                            url: crudServiceBaseUrl + "/Products",
+                            dataType: "json"
+                        },
+                        update: {
+                            url: crudServiceBaseUrl + "/Products/Update",
+                            dataType: "json"
+                        },
+                        destroy: {
+                            url: crudServiceBaseUrl + "/Products/Destroy",
+                            dataType: "json"
+                        },
+                        create: {
+                            url: crudServiceBaseUrl + "/Products/Create",
+                            dataType: "json"
+                        },
+                        parameterMap: function (options, operation) {
+                            if (operation !== "read" && options.models) {
+                                return { models: kendo.stringify(options.models) };
+                            }
+                        }
+                    },
+                    batch: true,
+                    pageSize: 20,
+                    schema: {
+                        model: {
+                            id: "productID",
+                            fields: {
+                                ProductID: { editable: false, nullable: true },
+                                ProductName: { validation: { required: true } },
+                                Category: { validation: { required: true } },
+                                UnitPrice: { type: "number", validation: { required: true, min: 1 } },
+                                Discontinued: { type: "boolean" },
+                                UnitsInStock: { type: "number", validation: { min: 0, required: true } }
+                            }
+                        }
+                    }
+                });
+
+            $("#grid").kendoGrid({
+                dataSource: dataSource,
+                pageable: true,
+                height: 550,
+                toolbar: ["create"],
+                columns: [
+                    "productName",
+                    { field: "category", title: "Category", width: "120px" },
+                    { field: "unitPrice", title: "Unit Price", format: "{0:c}", width: "120px" },
+                    { field: "unitsInStock", title: "Units In Stock", width: "120px" },
+                    { field: "discontinued", title: "Discontinued", width: "120px", editor: customBoolEditor },
+                    { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }],
+                editable: "inline"
+            });
+        });
+
+        function customBoolEditor(container, options) {
+            $('<input class="k-checkbox" type="checkbox" name="Discontinued" data-type="boolean" data-bind="checked:Discontinued">').appendTo(container);
+        }
+    </script>
+}
