@@ -6,21 +6,13 @@
 body {
 	font-family: 'Lato', sans-serif;
 	color: var(--text-color);
-	overflow: hidden
+	overflow: hidden;
+	height: 100vh;
 }
-
-.landing {
-	background-color: rgba(0, 0, 0, 0);
-	background-repeat: no-repeat;
-	background-image: url(../images/bg-landing.jpg);
-	background-size: cover;
-	background-position: center center;
-	width: 100%;
-	min-height: 100vh;
-	max-height: 100vh;
-	opacity: 1;
+main {
 	display: flex;
 	flex-direction: column;
+	height: 100%;
 }
 
 .landing .content {
@@ -45,10 +37,6 @@ body {
 	background-color: #597b29;
 }
 
-.sideline {
-	background-color: var(--primary-color);
-}
-
 .logoPrimary {
 	display: none;
 }
@@ -61,6 +49,13 @@ body {
 	padding: 0 !important
 }
 
+.flex-center-all{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
 
 
 @media (max-width: 575.98px) {
@@ -69,7 +64,7 @@ body {
 	}
 
 	.landing .content p {
-		margin: 25px 0
+		margin: 25px 0;
 	}
 }
 
@@ -87,6 +82,17 @@ body {
 	.landing {
 		padding-left: 5em;
 		padding-right: 5em;
+	}
+
+	.sideline {
+		background-color: var(--primary-color);
+		width: 8px;
+		height: 185px;
+		position: absolute;
+	}
+
+	.landing .content {
+		padding-left: 25px;
 	}
 
 	.landing .content h1 {
