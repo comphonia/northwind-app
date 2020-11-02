@@ -20,6 +20,7 @@ namespace NorthwindWeb.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation("Landing page accessed");
             return View();
         }
 
