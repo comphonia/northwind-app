@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NorthwindWeb.Data;
 using NorthwindWeb.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 
 namespace NorthwindWeb.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly ProductRepository _productRepository;
@@ -15,14 +16,19 @@ namespace NorthwindWeb.Controllers
         {
             _productRepository = new ProductRepository(northwindDbContext);
         }
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return this.Json(_productRepository.All());
         }
+        public ActionResult Categories()
+        {
+            return this.Json(_productRepository.GetCategories());
+        }
 
         public JsonResult Update()
         {
-            var models = JsonSerializer.Deserialize<IEnumerable<Product>>("models");
+            var models = this.DeserializeObject<IEnumerable<Product>>("models");
             if (models != null)
             {
                 _productRepository.Update(models);
@@ -32,7 +38,7 @@ namespace NorthwindWeb.Controllers
 
         public ActionResult Destroy()
         {
-            var products = JsonSerializer.Deserialize<IEnumerable<Product>>("models");
+            var products = this.DeserializeObject<IEnumerable<Product>>("models");
 
             if (products != null)
             {
@@ -43,7 +49,7 @@ namespace NorthwindWeb.Controllers
 
         public ActionResult Create()
         {
-            var products = JsonSerializer.Deserialize<IEnumerable<Product>>("models");
+            var products = this.DeserializeObject<IEnumerable<Product>>("models");
             if (products != null)
             {
                 _productRepository.Insert(products);
@@ -62,7 +68,7 @@ namespace NorthwindWeb.Controllers
 
         public JsonResult Submit()
         {
-            var model = JsonSerializer.Deserialize<ProductSubmitViewModel>("models");
+            var model = this.DeserializeObject<ProductSubmitViewModel>("models");
 
             if (model != null && model.Created != null)
             {

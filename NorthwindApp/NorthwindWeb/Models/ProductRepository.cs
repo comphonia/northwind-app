@@ -14,6 +14,13 @@ namespace NorthwindWeb.Models
             _northwindDbContext = northwindDbContext;
         }
 
+        public Array GetCategories()
+        {
+            var categories = _northwindDbContext.Categories.Select(c => c).ToArray();
+
+            return categories;
+        }
+
         public IList<Product> All()
         {
             var result = _northwindDbContext.Products as IList<Product>;
@@ -25,11 +32,19 @@ namespace NorthwindWeb.Models
                      {
                          ProductID = p.ProductID,
                          ProductName = p.ProductName,
-                         Category = "Test",
+                         CategoryID = p.CategoryID,
+                         Category = new Category
+                         {
+                             CategoryID = p.CategoryID,
+                             CategoryName = _northwindDbContext.Categories
+                            .Where(c => c.CategoryID == p.CategoryID)
+                            .Select(n => n.CategoryName).FirstOrDefault()
+                         },
                          UnitPrice = p.UnitPrice,
                          UnitsInStock = p.UnitsInStock,
                          Discontinued = p.Discontinued
                      }).ToList();
+
             }
 
             return result;
@@ -42,17 +57,16 @@ namespace NorthwindWeb.Models
 
         public void Insert(Product product)
         {
-            var first = All().OrderByDescending(p => p.ProductID).FirstOrDefault();
-            if (first != null)
+            var tempProduct = new Product
             {
-                product.ProductID = first.ProductID + 1;
-            }
-            else
-            {
-                product.ProductID = 0;
-            }
-
-            All().Insert(0, product);
+                ProductName = product.ProductName,
+                CategoryID = product.Category.CategoryID,
+                UnitPrice = product.UnitPrice,
+                UnitsInStock = product.UnitsInStock,
+                Discontinued = product.Discontinued
+            };
+            _northwindDbContext.Products.Add(tempProduct);
+            _northwindDbContext.SaveChanges();
         }
 
         public void Insert(IEnumerable<Product> products)
@@ -68,11 +82,19 @@ namespace NorthwindWeb.Models
             var target = One(p => p.ProductID == product.ProductID);
             if (target != null)
             {
-                target.ProductName = product.ProductName;
-                target.UnitPrice = product.UnitPrice;
-                target.UnitsInStock = product.UnitsInStock;
-                target.Discontinued = product.Discontinued;
+                target = new Product
+                {
+                    ProductID = product.ProductID,
+                    ProductName = product.ProductName,
+                    CategoryID = product.Category.CategoryID,
+                    UnitPrice = product.UnitPrice,
+                    UnitsInStock = product.UnitsInStock,
+                    Discontinued = product.Discontinued
+                };
+                _northwindDbContext.Products.Update(target);
+                _northwindDbContext.SaveChanges();
             }
+
         }
 
         public void Update(IEnumerable<Product> products)
@@ -86,9 +108,17 @@ namespace NorthwindWeb.Models
         public void Delete(Product product)
         {
             var target = One(p => p.ProductID == product.ProductID);
+            var targetOrderDetails = _northwindDbContext.OrderDetails.Where(o => o.ProductID == target.ProductID).ToArray();
+
             if (target != null)
             {
-                All().Remove(target);
+                // delete from the order table first to break the FK constraint
+
+                _northwindDbContext.OrderDetails.RemoveRange(targetOrderDetails);
+                _northwindDbContext.SaveChangesAsync();
+
+                _northwindDbContext.Products.Remove(target);
+                _northwindDbContext.SaveChangesAsync();
             }
         }
 
