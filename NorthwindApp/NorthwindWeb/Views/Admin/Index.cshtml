@@ -82,7 +82,7 @@
                 toolbar: ["create", "search"],
                 columns: [
                     "productName",
-                    { field: "category.categoryName", title: "Category", width: "120px", editor: CategoryEditor, groupHeaderTemplate: "Category: #=data.value#, Total Sales: #=kendo.format('{0:c}', aggregates.TotalSales.sum)#"},
+                    { field: "category.categoryName", title: "Category", width: "120px", editor: CategoryEditor, groupHeaderTemplate: "Category: #=data.value#, Total Sales: #=kendo.format('{0:c}', aggregates.TotalSales.sum)#" },
                     { field: "unitPrice", title: "Unit Price", format: "{0:c}", width: "120px" },
                     { field: "unitsInStock", title: "Units In Stock", width: "120px" },
                     { field: "discontinued", title: "Discontinued", width: "120px", editor: customBoolEditor },
