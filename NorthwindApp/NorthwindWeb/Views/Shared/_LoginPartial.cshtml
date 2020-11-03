@@ -7,6 +7,8 @@
 {
     <div class="navbar-text ml-auto">
         <a class="nav-link text-dark" asp-controller="Admin" asp-action="Index" title="Admin">ADMIN</a>
+    </div> <div class="navbar-text">
+        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Admin">PROFILE</a>
     </div>
     <div class="navbar-text">
         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

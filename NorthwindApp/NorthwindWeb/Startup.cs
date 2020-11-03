@@ -84,5 +84,6 @@ namespace NorthwindWeb
                 endpoints.MapRazorPages();
             });
         }
+
     }
 }
