@@ -60,11 +60,16 @@
                             id: "productID",
                             fields: {
                                 ProductID: { editable: false, nullable: true },
-                                ProductName: { validation: { required: true } },
-                                Category: { validation: { required: true } },
-                                UnitPrice: { type: "number", validation: { required: true, min: 1 } },
-                                Discontinued: { type: "boolean" },
-                                UnitsInStock: { type: "number", validation: { min: 0, required: true } }
+                                productName: { validation: { required: true } },
+                                category: {
+                                    defaultValue: {
+                                        CategoryID: 8,
+                                        CategoryName: "Seafood"
+                                    }
+                                },
+                                unitPrice: { type: "number", validation: { required: true, min: 1 } },
+                                discontinued: { type: "boolean" },
+                                unitsInStock: { type: "number", validation: { min: 0, required: true } }
                             }
                         }
                     }
@@ -74,10 +79,10 @@
                 dataSource: dataSource,
                 pageable: true,
                 height: 550,
-                toolbar: ["create"],
+                toolbar: ["create", "search"],
                 columns: [
                     "productName",
-                    { field: "category", title: "Category", width: "120px" },
+                    { field: "category.categoryName", title: "Category", width: "120px", editor: CategoryEditor, groupHeaderTemplate: "Category: #=data.value#, Total Sales: #=kendo.format('{0:c}', aggregates.TotalSales.sum)#"},
                     { field: "unitPrice", title: "Unit Price", format: "{0:c}", width: "120px" },
                     { field: "unitsInStock", title: "Units In Stock", width: "120px" },
                     { field: "discontinued", title: "Discontinued", width: "120px", editor: customBoolEditor },
@@ -89,5 +94,43 @@
         function customBoolEditor(container, options) {
             $('<input class="k-checkbox" type="checkbox" name="Discontinued" data-type="boolean" data-bind="checked:Discontinued">').appendTo(container);
         }
+
+        function CategoryEditor(container, options) {
+            $('<input required name="Category">')
+                .appendTo(container)
+                .kendoDropDownList({
+                    autoBind: false,
+                    dataTextField: "CategoryName",
+                    dataValueField: "CategoryID",
+                    dataSource: {
+                        data: categories
+                    }
+                });
+        }
+        var categories = [{
+            "CategoryID": 1,
+            "CategoryName": "Beverages"
+        }, {
+            "CategoryID": 2,
+            "CategoryName": "Condiments"
+        }, {
+            "CategoryID": 3,
+            "CategoryName": "Confections"
+        }, {
+            "CategoryID": 4,
+            "CategoryName": "Dairy Products"
+        }, {
+            "CategoryID": 5,
+            "CategoryName": "Grains/Cereals"
+        }, {
+            "CategoryID": 6,
+            "CategoryName": "Meat/Poultry"
+        }, {
+            "CategoryID": 7,
+            "CategoryName": "Produce"
+        }, {
+            "CategoryID": 8,
+            "CategoryName": "Seafood"
+        }];
     </script>
 }

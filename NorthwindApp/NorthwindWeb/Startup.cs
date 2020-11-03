@@ -53,20 +53,19 @@ namespace NorthwindWeb
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // add a custom error page for 404 status codes
-                app.Use(async (context, next) =>
-                {
-                    await next();
-                    if (context.Response.StatusCode == 404)
-                    {
-                        context.Request.Path = "/Home/Error";
-                        await next();
-                    }
-                });
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            // add a custom error page for 404 status codes
+            app.Use(async (context, next) =>
+            {
+                await next();
+                if (context.Response.StatusCode == 404)
+                {
+                    context.Request.Path = "/Home/Error";
+                    await next();
+                }
+            });
 
 
             app.UseHttpsRedirection();
