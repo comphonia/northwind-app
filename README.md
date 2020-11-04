@@ -19,4 +19,5 @@ For more info see the `./documentation` folder
 - Ensure that the `Northwind` database is installed after the script has been run.
 - Check your connection string to make sure it matches up with the `NorthwindDbConnection` in `appsettings.json`
     `"Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Northwind;Integrated Security=True;"`
-- Build and the app in release mode!
+- Apply migrations using the Package Manager `Update-Database -Context ApplicationDbContext`
+- Run the app in release mode!
