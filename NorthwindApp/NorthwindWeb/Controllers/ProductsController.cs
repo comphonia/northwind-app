@@ -19,7 +19,8 @@ namespace NorthwindWeb.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            return this.Json(_productRepository.All());
+            //return this.Json(_productRepository.All());
+            return View(_productRepository.All());
         }
         public ActionResult Categories()
         {
